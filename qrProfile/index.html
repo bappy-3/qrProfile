@@ -52,13 +52,13 @@
       const address = form.address.value.trim();
 
       // Save to SheetDB
-      // You can change the field names as per your SheetDB config
+      // Field names must match your SheetDB/Google Sheet headers exactly
       const data = {
         data: {
-          fullName,
-          phone,
-          bloodGroup,
-          address
+          'FULL NAME': fullName,
+          'Mobile Number': phone,
+          'Blood Group': bloodGroup,
+          'Address': address
         }
       };
       try {
