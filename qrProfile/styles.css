@@ -1,0 +1,130 @@
+body {
+  background: #f4f8fb;
+  font-family: 'Segoe UI', Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+}
+
+.container {
+  max-width: 400px;
+  margin: 40px auto;
+  padding: 24px;
+}
+
+.card {
+  background: #fff;
+  border-radius: 18px;
+  box-shadow: 0 4px 24px rgba(30, 60, 90, 0.08), 0 1.5px 4px rgba(30, 60, 90, 0.04);
+  padding: 32px 24px 24px 24px;
+  margin-top: 32px;
+}
+
+h1 {
+  text-align: center;
+  color: #2a5dba;
+  margin-bottom: 24px;
+  font-size: 2rem;
+  letter-spacing: 1px;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+label {
+  font-weight: 500;
+  color: #3a3a3a;
+  margin-bottom: 4px;
+}
+
+input, textarea {
+  border: 1px solid #dbeafe;
+  border-radius: 8px;
+  padding: 10px 12px;
+  font-size: 1rem;
+  background: #f8fbff;
+  transition: border 0.2s;
+}
+
+input:focus, textarea:focus {
+  border-color: #2a5dba;
+  outline: none;
+}
+
+button {
+  background: #2a5dba;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 12px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(42, 93, 186, 0.08);
+  transition: background 0.2s;
+}
+
+button:hover {
+  background: #1d417a;
+}
+
+#result {
+  text-align: center;
+  margin-top: 24px;
+}
+
+#qrcode {
+  margin: 0 auto 16px auto;
+  width: 200px;
+  height: 200px;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(42, 93, 186, 0.06);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#profileUrl {
+  font-size: 0.95rem;
+  color: #2a5dba;
+  margin: 12px 0 18px 0;
+  word-break: break-all;
+}
+
+.profile-info {
+  background: #f8fbff;
+  border-radius: 12px;
+  padding: 20px 16px;
+  box-shadow: 0 1px 4px rgba(42, 93, 186, 0.04);
+  margin-top: 18px;
+}
+
+.profile-info h2 {
+  margin: 0 0 10px 0;
+  color: #2a5dba;
+}
+
+.profile-info p {
+  margin: 6px 0;
+  color: #333;
+  font-size: 1rem;
+}
+
+@media (max-width: 500px) {
+  .container {
+    max-width: 98vw;
+    padding: 10px;
+  }
+  .card {
+    padding: 18px 8px 16px 8px;
+    margin-top: 12px;
+  }
+  #qrcode {
+    width: 150px;
+    height: 150px;
+  }
+} 

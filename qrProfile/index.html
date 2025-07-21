@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>qrProfile - Create Your Profile</title>
+  <link rel="stylesheet" href="styles.css">
+  <!-- jsPDF CDN -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <!-- QRCode.js CDN -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+</head>
+<body>
+  <div class="container card">
+    <h1>qrProfile</h1>
+    <form id="profileForm">
+      <label for="fullName">Full Name</label>
+      <input type="text" id="fullName" name="fullName" placeholder="Enter your full name" required>
+      <label for="phone">Phone Number</label>
+      <input type="tel" id="phone" name="phone" placeholder="e.g. 01700000000" required>
+      <label for="bloodGroup">Blood Group</label>
+      <input type="text" id="bloodGroup" name="bloodGroup" placeholder="e.g. A+" required>
+      <label for="address">Address</label>
+      <textarea id="address" name="address" placeholder="Enter your address" required></textarea>
+      <button type="submit">Create Profile</button>
+    </form>
+    <div id="result" style="display:none;">
+      <h2>Your QR Code</h2>
+      <div id="qrcode"></div>
+      <p id="profileUrl"></p>
+      <button id="downloadPdfBtn">Download PDF</button>
+    </div>
+  </div>
+  <script>
+    // ====== CONFIGURATION ======
+    // Replace this with your SheetDB endpoint
+    const SHEETDB_ENDPOINT = 'https://sheetdb.io/api/v1/oggwndcfwe81g';
+
+    // ====== FORM HANDLING ======
+    const form = document.getElementById('profileForm');
+    const resultDiv = document.getElementById('result');
+    const qrcodeDiv = document.getElementById('qrcode');
+    const profileUrlP = document.getElementById('profileUrl');
+    const downloadPdfBtn = document.getElementById('downloadPdfBtn');
+    let generatedUrl = '';
+
+    form.addEventListener('submit', async function(e) {
+      e.preventDefault();
+      const fullName = form.fullName.value.trim();
+      const phone = form.phone.value.trim();
+      const bloodGroup = form.bloodGroup.value.trim();
+      const address = form.address.value.trim();
+
+      // Save to SheetDB
+      // You can change the field names as per your SheetDB config
+      const data = {
+        data: {
+          fullName,
+          phone,
+          bloodGroup,
+          address
+        }
+      };
+      try {
+        await fetch(SHEETDB_ENDPOINT, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data)
+        });
+      } catch (err) {
+        alert('Failed to save data. Please try again.');
+        return;
+      }
+
+      // Generate profile URL
+      generatedUrl = `${window.location.origin}${window.location.pathname.replace('index.html','')}profile.html?phone=${encodeURIComponent(phone)}`;
+      profileUrlP.textContent = generatedUrl;
+      profileUrlP.style.wordBreak = 'break-all';
+
+      // Generate QR code
+      qrcodeDiv.innerHTML = '';
+      new QRCode(qrcodeDiv, {
+        text: generatedUrl,
+        width: 200,
+        height: 200,
+        colorDark : '#222',
+        colorLight : '#fff',
+        correctLevel : QRCode.CorrectLevel.H
+      });
+
+      resultDiv.style.display = 'block';
+      form.style.display = 'none';
+    });
+
+    // ====== PDF DOWNLOAD ======
+    downloadPdfBtn.addEventListener('click', function() {
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF();
+      doc.text('Scan to view profile:', 10, 10);
+      // Get QR code image
+      const qrImg = qrcodeDiv.querySelector('img');
+      if (qrImg) {
+        doc.addImage(qrImg.src, 'PNG', 10, 20, 50, 50);
+      }
+      doc.text(generatedUrl, 10, 80);
+      doc.save('qrProfile.pdf');
+    });
+  </script>
+</body>
+</html> 
