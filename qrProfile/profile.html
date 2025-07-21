@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>qrProfile - Profile</title>
-  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
   <div class="container card" id="profileCard">
@@ -14,22 +14,19 @@
     </div>
   </div>
   <script>
-    // ====== CONFIGURATION ======
-    // Replace this with your SheetDB endpoint
     const SHEETDB_ENDPOINT = 'https://sheetdb.io/api/v1/oggwndcfwe81g';
 
-    // ====== GET PHONE PARAMETER ======
     function getQueryParam(param) {
       const urlParams = new URLSearchParams(window.location.search);
       return urlParams.get(param);
     }
+
     const phone = getQueryParam('phone');
     const profileContent = document.getElementById('profileContent');
 
     if (!phone) {
       profileContent.innerHTML = '<p>Profile not found.</p>';
     } else {
-      // Fetch from SheetDB
       fetch(`${SHEETDB_ENDPOINT}/search?Mobile=${encodeURIComponent(phone)}`)
         .then(res => res.json())
         .then(data => {
@@ -53,4 +50,4 @@
     }
   </script>
 </body>
-</html> 
+</html>
