@@ -30,7 +30,7 @@
       profileContent.innerHTML = '<p>Profile not found.</p>';
     } else {
       // Fetch from SheetDB
-      fetch(`${SHEETDB_ENDPOINT}/search?Mobile%20Number=${encodeURIComponent(phone)}`)
+      fetch(`${SHEETDB_ENDPOINT}/search?Mobile Number=${encodeURIComponent(phone)}`)
         .then(res => res.json())
         .then(data => {
           if (data && data.length > 0) {
