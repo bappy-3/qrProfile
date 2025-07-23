@@ -8,7 +8,7 @@
 </head>
 <body>
   <div class="container card" id="profileCard">
-    <h1>qrProfile</h1>
+    <h1>See qrProfile</h1>
     <div id="profileContent">
       <p>Loading profile...</p>
     </div>
@@ -34,11 +34,32 @@
             const user = data[0];
             profileContent.innerHTML = `
               <div class="profile-info">
-                <h2>${user['FULL NAME'] || ''}</h2>
-                <p><strong>Phone:</strong> ${user['Mobile'] || ''}</p>
-                <p><strong>Blood Group:</strong> ${user['Blood Group'] || ''}</p>
-                <p><strong>Address:</strong> ${user['Address'] || ''}</p>
-              </div>
+  <h2>${user['FULL NAME'] || ''}</h2>
+  <p><strong>Mobile:</strong> ${user['Mobile'] || ''}</p>
+  <p><strong>Blood Group:</strong> ${user['Blood Group'] || ''}</p>
+  <p><strong>Emergency Contact:</strong> ${user['Emergency Contact Number'] || ''}</p>
+  ${user['Address'] ? `<p><strong>Address:</strong> ${user['Address']}</p>` : ''}
+  
+  ${user["Father's Name"] ? `<p><strong>Father's Name:</strong> ${user["Father's Name"]}</p>` : ''}
+  ${user["Mother's Name"] ? `<p><strong>Mother's Name:</strong> ${user["Mother's Name"]}</p>` : ''}
+  ${user['Name of the Institution'] ? `<p><strong>Institution:</strong> ${user['Name of the Institution']}</p>` : ''}
+${user['NID/PASSPORT'] ? `<p><strong>NID/PASSPORT:</strong> ${user['NID/PASSPORT']}</p>` : ''}
+
+  ${user['Add Your Picture']
+  ? (() => {
+      let imageUrl = user['Add Your Picture'];
+      const driveMatch = imageUrl.match(/\/d\/(.*?)\//);
+      if (driveMatch && driveMatch[1]) {
+        imageUrl = `https://drive.google.com/uc?export=view&id=${driveMatch[1]}`;
+      }
+      return `<button onclick="window.open('${imageUrl}', '_blank')" style="margin-top:10px;">See Picture</button>`;
+    })()
+  : ''
+}
+
+
+</div>
+
             `;
           } else {
             profileContent.innerHTML = '<p>Profile not found.</p>';

@@ -12,14 +12,36 @@
   <div class="container card">
     <h1>See qrProfile</h1>
     <form id="profileForm">
-      <label for="fullName">Full Name</label>
+      <label for="fullName">Full Name*</label>
       <input type="text" id="fullName" name="fullName" required />
-      <label for="phone">Phone Number</label>
+
+      <label for="phone">Mobile*</label>
       <input type="tel" id="phone" name="phone" required />
-      <label for="bloodGroup">Blood Group</label>
+
+      <label for="bloodGroup">Blood Group*</label>
       <input type="text" id="bloodGroup" name="bloodGroup" required />
+
       <label for="address">Address</label>
-      <textarea id="address" name="address" required></textarea>
+      <textarea id="address" name="address"></textarea>
+
+      <label for="institution">Name of the Institution</label>
+      <input type="text" id="institution" name="institution" />
+
+      <label for="fatherName">Father's Name</label>
+      <input type="text" id="fatherName" name="fatherName" />
+
+      <label for="motherName">Mother's Name</label>
+      <input type="text" id="motherName" name="motherName" />
+
+      <label for="emergencyContact">Emergency Contact Number*</label>
+      <input type="tel" id="emergencyContact" name="emergencyContact" required />
+
+      <label for="nidPassport">NID/PASSPORT</label>
+      <input type="text" id="nidPassport" name="nidPassport" />
+
+      <label for="picture">Add Your Picture (URL)</label>
+      <input type="url" id="picture" name="picture" />
+
       <button type="submit">Create Profile</button>
     </form>
     <div id="result" style="display:none;">
@@ -41,17 +63,19 @@
 
     form.addEventListener('submit', async function(e) {
       e.preventDefault();
-      const fullName = form.fullName.value.trim();
-      const phone = form.phone.value.trim();
-      const bloodGroup = form.bloodGroup.value.trim();
-      const address = form.address.value.trim();
 
       const data = {
         data: {
-          'FULL NAME': fullName,
-          'Mobile': phone,
-          'Blood Group': bloodGroup,
-          'Address': address
+          'FULL NAME': form.fullName.value.trim(),
+          'Mobile': form.phone.value.trim(),
+          'Blood Group': form.bloodGroup.value.trim(),
+          'Address': form.address.value.trim(),
+          'Name of the Institution': form.institution.value.trim(),
+          "Father's Name": form.fatherName.value.trim(),
+          "Mother's Name": form.motherName.value.trim(),
+          'Emergency Contact Number': form.emergencyContact.value.trim(),
+          'NID/PASSPORT': form.nidPassport.value.trim(),
+          'Add Your Picture': form.picture.value.trim()
         }
       };
 
@@ -66,7 +90,7 @@
         return;
       }
 
-      generatedUrl = `${window.location.origin}${window.location.pathname.replace('index.html','')}profile.html?phone=${encodeURIComponent(phone)}`;
+      generatedUrl = `${window.location.origin}${window.location.pathname.replace('index.html','')}profile.html?phone=${encodeURIComponent(form.phone.value.trim())}`;
       profileUrlP.textContent = generatedUrl;
       profileUrlP.style.wordBreak = 'break-all';
 
