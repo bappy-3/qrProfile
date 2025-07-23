@@ -52,7 +52,7 @@ ${user['NID/PASSPORT'] ? `<p><strong>NID/PASSPORT:</strong> ${user['NID/PASSPORT
       if (driveMatch && driveMatch[1]) {
         imageUrl = `https://drive.google.com/uc?export=view&id=${driveMatch[1]}`;
       }
-      return `<button onclick="window.open('${imageUrl}', '_blank')" style="margin-top:10px;">See Picture</button>`;
+      return `<img src="${imageUrl}" alt="Profile Picture" style="margin-top:10px; max-width: 200px; border-radius: 10px;" />`;
     })()
   : ''
 }
