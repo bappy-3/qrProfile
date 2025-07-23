@@ -73,19 +73,20 @@
       }
 
       const data = {
-        data: {
-          'FULL NAME': form.fullName.value.trim(),
-          'Mobile': form.phone.value.trim(),
-          'Blood Group': form.bloodGroup.value.trim(),
-          'Address': form.address.value.trim(),
-          'Name of the Institution': form.institution.value.trim(),
-          "Father's Name": form.fatherName.value.trim(),
-          "Mother's Name": form.motherName.value.trim(),
-          'Emergency Contact Number': form.emergencyContact.value.trim(),
-          'NID/PASSPORT': form.nidPassport.value.trim(),
-          'Add Your Picture': pictureBase64
-        }
-      };
+  data: {
+    'FULL NAME': form.elements['fullName'].value.trim(),
+    'Mobile': form.elements['phone'].value.trim(),
+    'Blood Group': form.elements['bloodGroup'].value.trim(),
+    'Address': form.elements['address'].value.trim(),
+    'Name of the Institution': form.elements['institution'].value.trim(),
+    "Father's Name": form.elements['fatherName'].value.trim(),
+    "Mother's Name": form.elements['motherName'].value.trim(),
+    'Emergency Contact Number': form.elements['emergencyContact'].value.trim(),
+    'NID/PASSPORT': form.elements['nidPassport'].value.trim(),
+    'Add Your Picture': pictureBase64
+  }
+};
+
 
       try {
         await fetch(SHEETDB_ENDPOINT, {
