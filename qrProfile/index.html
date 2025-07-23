@@ -39,30 +39,38 @@
       <label for="nidPassport">NID/PASSPORT</label>
       <input type="text" id="nidPassport" name="nidPassport" />
 
-      <label for="picture">Add Your Picture (URL)</label>
-      <input type="url" id="picture" name="picture" />
+      <label for="picture">Add Your Picture (Upload)</label>
+      <input type="file" id="picture" name="picture" accept="image/*" />
 
       <button type="submit">Create Profile</button>
     </form>
+
     <div id="result" style="display:none;">
       <h2>Your QR Code</h2>
       <div id="qrcode"></div>
-      <p id="profileUrl"></p>
       <button id="downloadPdfBtn">Download PDF</button>
     </div>
   </div>
+
   <script>
     const SHEETDB_ENDPOINT = 'https://sheetdb.io/api/v1/oggwndcfwe81g';
 
     const form = document.getElementById('profileForm');
     const resultDiv = document.getElementById('result');
     const qrcodeDiv = document.getElementById('qrcode');
-    const profileUrlP = document.getElementById('profileUrl');
     const downloadPdfBtn = document.getElementById('downloadPdfBtn');
     let generatedUrl = '';
 
     form.addEventListener('submit', async function(e) {
       e.preventDefault();
+
+      const fileInput = document.getElementById('picture');
+      const pictureFile = fileInput.files[0];
+
+      let pictureBase64 = '';
+      if (pictureFile) {
+        pictureBase64 = await toBase64(pictureFile);
+      }
 
       const data = {
         data: {
@@ -75,7 +83,7 @@
           "Mother's Name": form.motherName.value.trim(),
           'Emergency Contact Number': form.emergencyContact.value.trim(),
           'NID/PASSPORT': form.nidPassport.value.trim(),
-          'Add Your Picture': form.picture.value.trim()
+          'Add Your Picture': pictureBase64
         }
       };
 
@@ -91,8 +99,6 @@
       }
 
       generatedUrl = `${window.location.origin}${window.location.pathname.replace('index.html','')}profile.html?phone=${encodeURIComponent(form.phone.value.trim())}`;
-      // profileUrlP.textContent = generatedUrl;
-      // profileUrlP.style.wordBreak = 'break-all';
 
       qrcodeDiv.innerHTML = '';
       new QRCode(qrcodeDiv, {
@@ -108,16 +114,40 @@
       form.style.display = 'none';
     });
 
-    downloadPdfBtn.addEventListener('click', function() {
+    function toBase64(file) {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = error => reject(error);
+      });
+    }
+
+    downloadPdfBtn.addEventListener('click', function () {
       const { jsPDF } = window.jspdf;
       const doc = new jsPDF();
       doc.text('Scan to view profile:', 10, 10);
+
       const qrImg = qrcodeDiv.querySelector('img');
-      if (qrImg) {
+      const qrCanvas = qrcodeDiv.querySelector('canvas');
+
+      if (qrImg && qrImg.src) {
         doc.addImage(qrImg.src, 'PNG', 10, 20, 50, 50);
+      } else if (qrCanvas) {
+        const canvasImg = qrCanvas.toDataURL("image/png");
+        doc.addImage(canvasImg, 'PNG', 10, 20, 50, 50);
       }
-      doc.text(generatedUrl, 10, 80);
-      doc.save('qrProfile.pdf');
+
+      // Mobile-safe PDF download using Blob
+      const pdfBlob = doc.output('blob');
+      const blobUrl = URL.createObjectURL(pdfBlob);
+      const link = document.createElement('a');
+      link.href = blobUrl;
+      link.download = 'qrProfile.pdf';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(blobUrl);
     });
   </script>
 </body>
